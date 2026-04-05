@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 class ImportantQuestionLocators:
 
-    price_and_payment = [By.CLASS_NAME, "accordion__heading-0"] # кнопка Сколько это стоит и как оплатить
+    price_and_payment = [By.ID, "accordion__heading-0"] # кнопка Сколько это стоит и как оплатить
     price_and_payment_text = [By.XPATH, "//p[contains(text(), '400 рублей')]"]
 
     multiple_scooters = [By.ID, "accordion__heading-1"] # кнопка Хочу сразу несколько самокатов
