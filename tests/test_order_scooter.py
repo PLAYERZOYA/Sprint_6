@@ -22,7 +22,6 @@ class TestOrderScooter:
         #инициализация страниц 
         personal_info_page = PersonalInformationOrderPage(driver)
         rental_info_page = RentalInformationOrderPage(driver)
-        logo_page = ClickThroughLogo(driver)
 
          # Нажатие кнопки Заказать в хедере страницы
         personal_info_page.click_order_button_in_header()
@@ -32,20 +31,14 @@ class TestOrderScooter:
         
         # Шаг 2: Заполнение информации об аренде
         rental_info_page.fill_rental_information(date, lease, color_name, comment)
+
         
-        # Проверка успешного создания заказа
+        # Проверка окна создания заказа
         rental_info_page.check_order_created_window()
+
+        # Проверка успешного создания заказа
+        rental_info_page.check_order_created_successful()
         
-        # Проверка логотипа Самокат
-        current_url, expected_url = logo_page.check_click_logo_scooter_open_home_page()
-        assert current_url == expected_url
-
-        # Проверка логотипа Яндекс
-        current_url, expected_url = logo_page.check_click_logo_yandex_open_dzen_home_page()
-        assert current_url == expected_url
-
-
-
 
     @pytest.mark.parametrize("test_data", OrderData.LOWER_BUTTON_DATA)
 
@@ -60,7 +53,6 @@ class TestOrderScooter:
         #инициализация страниц с переданным драйвером
         personal_info_page = PersonalInformationOrderPage(driver)
         rental_info_page = RentalInformationOrderPage(driver)
-        logo_page = ClickThroughLogo(driver)
 
          # Нажатие кнопки Заказать внизу страницы
         personal_info_page.click_order_button()
@@ -72,14 +64,22 @@ class TestOrderScooter:
         date, lease, color_name, comment = rental_data
         rental_info_page.fill_rental_information(date, lease, color_name, comment)
         
-        # Проверка успешного создания заказа
+        # Проверка окна создания заказа
         rental_info_page.check_order_created_window()
-        
-        # Проверка логотипа Самокат
-        current_url, expected_url = logo_page.check_click_logo_scooter_open_home_page()
-        assert current_url == expected_url
-        
 
-        # Проверка логотипа Яндекс
-        current_url, expected_url = logo_page.check_click_logo_yandex_open_dzen_home_page()
-        assert current_url == expected_url
+        # Проверка успешного создания заказа
+        rental_info_page.check_order_created_successful()
+
+
+        
+    # Проверка логотипа Самокат
+def test_check_click_logo_scooter_open_home_page(driver):
+    logo_page = ClickThroughLogo(driver)
+    current_url, expected_url = logo_page.check_click_logo_scooter_open_home_page()
+    assert current_url == expected_url
+
+# Проверка логотипа Яндекс
+def test_check_click_logo_yandex_open_dzen_home_page(driver):
+    logo_page = ClickThroughLogo(driver)
+    current_url, expected_url = logo_page.check_click_logo_yandex_open_dzen_home_page()
+    assert current_url == expected_url

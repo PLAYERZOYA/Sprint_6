@@ -1,107 +1,86 @@
 
 from locators.important_questions_locators import ImportantQuestionLocators
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
+from page_objects.base_page import BasePage
+import allure
 
-class ImportantQuestions:
+
+class ImportantQuestions(BasePage):
 
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
 
-    def click_price_and_payment_question(self):
-        heading_1 = self.driver.find_element(*ImportantQuestionLocators.price_and_payment)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_1)
 
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.price_and_payment))
-        heading_1.click()
+    def check_question_answer(self, question_locator, answer_locator, expected_text):
+
+        self.scroll_into_view(question_locator)
+        self.wait_for_element_visible(question_locator)
+        self.click_element_with_wait_clickable(question_locator)
+        actual_text = self.return_text_of_element(answer_locator)
+        return actual_text, expected_text
     
+    @allure.step('Клик по вопросу "Сколько это стоит? И как оплатить?" и проверка ответа')
+    def click_price_and_payment_question(self):
+        return self.check_question_answer(
+            ImportantQuestionLocators.price_and_payment,
+            ImportantQuestionLocators.price_and_payment_text,
+            'Сутки — 400 рублей. Оплата курьеру — наличными или картой.'
+        )
 
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.price_and_payment_text).text
-        expected_result = 'Сутки — 400 рублей. Оплата курьеру — наличными или картой.'
-
-        return actually_result, expected_result
-
-
+    @allure.step('Клик по вопросу "Хочу сразу несколько самокатов! Так можно?" и проверка ответа')
     def click_multiple_scooters_question(self):
-        heading_2 = self.driver.find_element(*ImportantQuestionLocators.multiple_scooters)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_2)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.multiple_scooters))
-        heading_2.click()
+        return self.check_question_answer(
+            ImportantQuestionLocators.multiple_scooters,
+            ImportantQuestionLocators.multiple_scooters_text,
+            'Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим.'
+        )
 
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.multiple_scooters_text).text
-        expected_result = 'Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим.'
-        
-        return actually_result, expected_result
-
+    @allure.step('Клик по вопросу "Как рассчитывается время аренды?" и проверка ответа')
     def click_rental_time_question(self):
-        heading_3 = self.driver.find_element(*ImportantQuestionLocators.rental_time)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_3)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.rental_time))
-        heading_3.click()
+        return self.check_question_answer(
+            ImportantQuestionLocators.rental_time,
+            ImportantQuestionLocators.rental_time_text,
+            'Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30.'
+        )
 
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.rental_time_text).text
-        expected_result = 'Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30.'
-        
-        return actually_result, expected_result
-        
+    @allure.step('Клик по вопросу "Можно ли заказать самокат прямо сегодня?" и проверка ответа')
     def click_order_today_question(self):
-        heading_4 = self.driver.find_element(*ImportantQuestionLocators.order_today)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_4)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.order_today))
-        heading_4.click()
+        return self.check_question_answer(
+            ImportantQuestionLocators.order_today,
+            ImportantQuestionLocators.order_today_text,
+            'Только начиная с завтрашнего дня. Но скоро станем расторопнее.'
+        )
 
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.order_today_text).text
-        expected_result = 'Только начиная с завтрашнего дня. Но скоро станем расторопнее.'
-        
-        return actually_result, expected_result
-
+    @allure.step('Клик по вопросу "Можно ли продлить заказ или вернуть самокат?" и проверка ответа')
     def click_extend_and_return_question(self):
-        heading_5 = self.driver.find_element(*ImportantQuestionLocators.extend_and_return)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_5)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.extend_and_return))
-        heading_5.click()
+        return self.check_question_answer(
+            ImportantQuestionLocators.extend_and_return,
+            ImportantQuestionLocators.extend_and_return_text,
+            'Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010.'
+        )
 
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.extend_and_return_text).text
-        expected_result = 'Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010.'
-        
-        return actually_result, expected_result
-
-
+    @allure.step('Клик по вопросу "А привезут ли самокат с полной зарядкой?" и проверка ответа')
     def click_charging_question(self):
-        heading_6 = self.driver.find_element(*ImportantQuestionLocators.charging)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_6)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.charging))
-        heading_6.click()
-
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.charging_text).text
-        expected_result = 'Самокат приезжает к вам с полной зарядкой. Этого хватает на восемь суток — даже если будете кататься без передышек и во сне. Зарядка не понадобится.'
-        
-        return actually_result, expected_result
-
-
-
+        return self.check_question_answer(
+            ImportantQuestionLocators.charging,
+            ImportantQuestionLocators.charging_text,
+            'Самокат приезжает к вам с полной зарядкой. Этого хватает на восемь суток — даже если будете кататься без передышек и во сне. Зарядка не понадобится.'
+        )
+    
+    @allure.step('Клик по вопросу "Отменяют ли заказ, если на самокат приехать не успели?" и проверка ответа')
     def click_order_cancellation_question(self):
-        heading_7 = self.driver.find_element(*ImportantQuestionLocators.order_cancellation)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_7)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.order_cancellation))
-        heading_7.click()
+        return self.check_question_answer(
+            ImportantQuestionLocators.order_cancellation,
+            ImportantQuestionLocators.order_cancellation_text,
+            'Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои.'
+        )
 
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.order_cancellation_text).text
-        expected_result = 'Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои.'
-        
-        return actually_result, expected_result
-
-
+    @allure.step('Клик по вопросу "Привезут ли самокат за МКАД?" и проверка ответа')
     def click_delivery_area_question(self):
-        heading_8 = self.driver.find_element(*ImportantQuestionLocators.delivery_area)
-        self.driver.execute_script("arguments[0].scrollIntoView();", heading_8)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(ImportantQuestionLocators.delivery_area))
-        heading_8.click()
-
-        actually_result = self.driver.find_element(*ImportantQuestionLocators.delivery_area_text).text
-        expected_result = 'Да, обязательно. Всем самокатов! И Москве, и Московской области.'
-        
-        return actually_result, expected_result
+        return self.check_question_answer(
+            ImportantQuestionLocators.delivery_area,
+            ImportantQuestionLocators.delivery_area_text,
+            'Да, обязательно. Всем самокатов! И Москве, и Московской области.'
+        )
 
 
 
